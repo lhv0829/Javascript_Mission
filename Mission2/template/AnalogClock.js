@@ -30,14 +30,14 @@ const AnalogClock = $container => {
     });
     $container.appendChild(timeDOM[i]);
   }
+  let deg_hr = getComputedStyle(hand_hr).getPropertyValue('--deg');
+  let deg_min = getComputedStyle(hand_min).getPropertyValue('--deg');
+  let deg_sec = getComputedStyle(hand_sec).getPropertyValue('--deg');
+
   let date = new Date();
   let hr = date.getHours();
   let min = date.getMinutes();
   let sec = date.getSeconds();
-
-  let deg_hr = getComputedStyle(hand_hr).getPropertyValue('--deg');
-  let deg_min = getComputedStyle(hand_min).getPropertyValue('--deg');
-  let deg_sec = getComputedStyle(hand_sec).getPropertyValue('--deg');
 
   deg_hr = hr * 30 + min * 0.5 + sec * (0.5 / 60);
   deg_min = min * 6 + 0.1 * sec;
