@@ -22,13 +22,13 @@ const AnalogClock = $container => {
   $container.appendChild(hand_hr);
   $container.appendChild(hand_min);
   $container.appendChild(hand_sec);
-  let timeDOM = new Array(12);
+  
   for(let i = 0; i < 12; i++){
-    timeDOM[i] = makeDOM('div', {
+    const time = makeDOM('div', {
       className : `time time${i + 1}`,
       innerHTML : `|`,
     });
-    $container.appendChild(timeDOM[i]);
+    $container.appendChild(time);
   }
   let deg_hr = getComputedStyle(hand_hr).getPropertyValue('--deg');
   let deg_min = getComputedStyle(hand_min).getPropertyValue('--deg');

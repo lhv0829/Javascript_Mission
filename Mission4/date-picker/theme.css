@@ -1,0 +1,81 @@
+@import url(https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css);
+
+.calendar{
+  --calendar-size : 400px;
+  width: var(--calendar-size);
+  /* height: var(--calendar-size); */
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
+  font-size: 14px;
+}
+.calendar-nav{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 60px;
+  background-color: #54c242;
+  color: white;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 10px;
+  width: 100%;
+}
+.month{
+  font-size: 16px;
+}
+.calendar-grid{
+  display: grid;
+  grid-template-rows: 1fr 6fr;
+  /* row-gap: 10px; */
+  /* border-radius: 0 0 8px 8px; */
+  width: 100%;
+  height: var(--calendar-size);
+}
+.calendar-day{
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  column-gap: 10px;
+  /* text-align: center; */
+  padding: 0 10px 0 10px;
+}
+.calendar-date{
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  align-items: center;
+  row-gap: 10px;
+  column-gap: 10px;
+  padding: 0 10px 10px 10px;
+}
+.day{
+  width: 100%;
+  height: 50%;
+  align-self: center;
+}
+.date{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.today{
+  border: 1px solid #54c242;
+  border-radius: 50%;
+}
+.last-month, .next-month{
+  color: gray;
+}
+.date-picker-input{
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  padding-left: 8px;
+  width: 150px;
+  height: 30px;
+  font-size: 1rem;
+  border-radius: 3px;
+}
+.date-picker-input:disabled{
+  border: 1px solid gray;
+  background-color: white;
+}
