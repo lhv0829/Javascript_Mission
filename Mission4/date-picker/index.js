@@ -32,40 +32,44 @@ const DatePicker = ($container) => {
     className: "date-picker-input",
     type: "text",
     value: "Select date",
-    disabled: "true",
+    readOnly: "true",
   });
+
   $container.appendChild(datePickerInput);
 
   const calendarDiv = makeDOM("div", {
     className: "calendar",
+    style: 'display: none;',
   });
   $container.appendChild(calendarDiv);
 
   const today = new Date();
 
-  const todayMonth = today.getMonth();
+  let currentYear = today.getFullYear();
+  let currentMonth = today.getMonth();
+  // const currentDate = today.getDate();
   const todayDate = today.getDate();
+  const todayMonth = today.getMonth();
   const todayYear = today.getFullYear();
   // const todayDay = today.getDay();
   // console.log(todayDay);
-  const monthFirstDate = new Date(todayYear, todayMonth, 1);
+  const monthFirstDate = new Date(currentYear, currentMonth, 1);
   console.log(monthFirstDate);
-  const monthFirstDay = monthFirstDate.getDay();
-  const monthFirstDayMonth = monthFirstDate.getMonth();
+  // const monthFirstDay = monthFirstDate.getDay();
 
   // calendar-nav
   const calendarNav = makeDOM("div", {
     className: "calendar-nav",
   });
   calendarDiv.appendChild(calendarNav);
-  const setYearMonth = (yearMonthInfo, todayMonth, todayYear) => {
+  const setYearMonth = (yearMonthInfo, currentMonth, currentYear) => {
     const month = makeDOM("div", {
       className: "month",
-      innerHTML: monthArray[todayMonth],
+      innerHTML: monthArray[currentMonth],
     });
     const year = makeDOM("div", {
       className: "year",
-      innerHTML: todayYear,
+      innerHTML: currentYear,
     });
     yearMonthInfo.appendChild(month);
     yearMonthInfo.appendChild(year);
@@ -82,7 +86,7 @@ const DatePicker = ($container) => {
   calendarNav.appendChild(leftArrow);
   calendarNav.appendChild(yearMonthInfo);
   calendarNav.appendChild(rightArrow);
-  setYearMonth(yearMonthInfo, todayMonth, todayYear);
+  // setYearMonth(yearMonthInfo, currentMonth, currentYear);
 
   // calendar-nav end
 
@@ -111,41 +115,47 @@ const DatePicker = ($container) => {
   });
   calendarGrid.appendChild(calendarDate);
 
-  const monthDateArray = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  let monthDateArray = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-  const setCalendarDate = (calendarDate, todayMonth) => {
+  const setCalendarDate = (calendarDate, currentMonth) => {
     const month = document.getElementsByClassName("month")[0];
-    const monthFirstDate = new Date(todayYear, todayMonth, 1);
+    console.log(month);
+    const year = document.getElementsByClassName('year')[0];
+    const monthFirstDate = new Date(currentYear, currentMonth, 1);
     // console.log(monthFirstDate);
     const monthFirstDay = monthFirstDate.getDay();
-    const monthFirstDayMonth = monthFirstDate.getMonth();
+    // const monthFirstDayMonth = monthFirstDate.getMonth();
     // console.log(month);
+    if(parseInt(year.innerHTML) % 4 === 0 && !(parseInt(year.innerHTML) % 100 === 0)) monthDateArray[1] = 29;
+    else if(parseInt(year.innerHTML) % 400 === 0) monthDateArray[1] = 29;
+    else monthDateArray[1] = 28;
     for (let i = 0; i < monthFirstDay; i++) {
       const date = makeDOM("div", {
         className: "date last-month",
         innerHTML:
-          monthDateArray[monthFirstDayMonth - 1] - monthFirstDay + 1 + i,
+          monthDateArray[currentMonth - 1] - monthFirstDay + 1 + i,
         "data-date":
-          monthDateArray[monthFirstDayMonth - 1] - monthFirstDay + 1 + i,
+          monthDateArray[currentMonth - 1] - monthFirstDay + 1 + i,
       });
+      if(currentMonth === 0){
+        date.innerHTML = monthDateArray[11] - monthFirstDay + 1 + i;
+        date.dataset.date = monthDateArray[11] - monthFirstDay + 1 + i;
+      }
       calendarDate.appendChild(date);
     }
 
-    for (let i = 0; i < monthDateArray[todayMonth]; i++) {
+    for (let i = 0; i < monthDateArray[currentMonth]; i++) {
       const date = makeDOM("div", {
         className: "date",
         innerHTML: i + 1,
         "data-date": i + 1,
       });
-      if (
-        monthArray.indexOf(month.innerHTML) === todayMonth &&
-        i + 1 === todayDate
-      )
-        date.classList.add("today");
+      if (monthArray.indexOf(month.innerHTML) === todayMonth && i + 1 === todayDate && year.innerHTML === todayYear.toString()) date.classList.add('today');
+      if(calendarDate.childNodes.length % 7 === 0) date.classList.add('sun');
       calendarDate.appendChild(date);
     }
-    console.log(calendarDate.childNodes.length);
     const currentChildNodeLength = calendarDate.childNodes.length;
+    console.log(currentChildNodeLength);
 
     for (let i = 0; i < 42 - currentChildNodeLength; i++) {
       const date = makeDOM("div", {
@@ -155,26 +165,65 @@ const DatePicker = ($container) => {
       });
       calendarDate.appendChild(date);
     }
+    // calendarDate.childNodes.forEach((item) => item.addEventListener('mouseover', e => {
+    //   e.target.classList.add('hover');
+    // }));
+    $container.addEventListener('mouseover', e => {
+      if(e.target.classList.contains('date')) e.target.classList.add('hover');
+    });
+    $container.addEventListener('mouseout', e => {
+      if(e.target.classList.contains('date')) e.target.classList.remove('hover');
+    });
+    // calendarDate.childNodes.forEach((item) => item.addEventListener('mouseout', e => {
+    //   e.target.classList.remove('hover');
+    // }));
   };
-  setCalendarDate(calendarDate, todayMonth, monthFirstDay);
-  let count = 0;
+  // setCalendarDate(calendarDate, currentMonth);
+  const setCalendarAll = (yearMonthInfo,calendarDate , month, year) => {
+    yearMonthInfo.replaceChildren();
+    calendarDate.replaceChildren();
+    setYearMonth(yearMonthInfo, month, year);
+    setCalendarDate(calendarDate, month);
+    calendarDate.childNodes.forEach((item) => item.addEventListener('click', e => {
+      if(e.target.classList.contains('last-month')){
+        if(month === 0) datePickerInput.value = `${year - 1}-12-${e.target.innerHTML}`;
+        else datePickerInput.value = `${year}-${month}-${e.target.innerHTML}`;
+      }
+      else if(e.target.classList.contains('next-month')){
+        if(month === 11) datePickerInput.value = `${year + 1}-01-${e.target.innerHTML}`;
+        else datePickerInput.value = `${year}-${month + 2}-${e.target.innerHTML}`;
+      }
+      else datePickerInput.value = `${year}-${month + 1}-${e.target.innerHTML}`;
+      calendarDiv.style.display = 'none';
+    }));
+  };
+  setCalendarAll(yearMonthInfo, calendarDate, currentMonth, currentYear);
+  // event
+  datePickerInput.addEventListener('click', () => {
+    calendarDiv.style.display = '';
+  });
+
   leftArrow.addEventListener('click', () => {
-    count++;
-    let beforeMonth = todayMonth - count;
-    calendarDate.replaceChildren();
-    setCalendarDate(calendarDate, beforeMonth);
-    yearMonthInfo.replaceChildren();
-    setYearMonth(yearMonthInfo, beforeMonth, todayYear);
+    currentMonth--;
+    if(currentMonth < 0){
+      currentYear -= 1;
+      currentMonth = 11;
+    }
+    setCalendarAll(yearMonthInfo, calendarDate, currentMonth, currentYear);
   });
-  count = 0;
+
   rightArrow.addEventListener('click', () => {
-    count++;
-    let beforeMonth = todayMonth + count;
-    calendarDate.replaceChildren();
-    setCalendarDate(calendarDate, beforeMonth);
-    yearMonthInfo.replaceChildren();
-    setYearMonth(yearMonthInfo, beforeMonth, todayYear);
+    currentMonth++;
+    if(currentMonth > 11){
+      currentYear += 1;
+      currentMonth = 0;
+    } 
+    setCalendarAll(yearMonthInfo, calendarDate, currentMonth, currentYear);
   });
+  document.body.addEventListener('click', e => {
+    if(e.target.className === 'date-picker') calendarDiv.style.display = 'none';
+  })
+
 };
 const linkDOM = makeDOM("link", {
   href: "date-picker/theme.css",

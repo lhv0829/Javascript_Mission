@@ -57,6 +57,6 @@ export const StarRating = $container => {
   beforeLink.after(linkDOM);
 
 };
-const setStarRating = () => {};
+// const setStarRating = () => {};
 
 export default StarRating;
