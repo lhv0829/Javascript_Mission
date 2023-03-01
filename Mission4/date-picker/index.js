@@ -129,39 +129,39 @@ const DatePicker = ($container) => {
     if(parseInt(year.innerHTML) % 4 === 0 && !(parseInt(year.innerHTML) % 100 === 0)) monthDateArray[1] = 29;
     else if(parseInt(year.innerHTML) % 400 === 0) monthDateArray[1] = 29;
     else monthDateArray[1] = 28;
-    for (let i = 0; i < monthFirstDay; i++) {
+    for (let i = 1; i <= monthFirstDay; i++) {
       const date = makeDOM("div", {
         className: "date last-month",
         innerHTML:
-          monthDateArray[currentMonth - 1] - monthFirstDay + 1 + i,
+          monthDateArray[currentMonth - 1] - monthFirstDay + i,
         "data-date":
-          monthDateArray[currentMonth - 1] - monthFirstDay + 1 + i,
+          monthDateArray[currentMonth - 1] - monthFirstDay + i,
       });
       if(currentMonth === 0){
-        date.innerHTML = monthDateArray[11] - monthFirstDay + 1 + i;
-        date.dataset.date = monthDateArray[11] - monthFirstDay + 1 + i;
+        date.innerHTML = monthDateArray[11] - monthFirstDay + i;
+        date.dataset.date = monthDateArray[11] - monthFirstDay + i;
       }
       calendarDate.appendChild(date);
     }
 
-    for (let i = 0; i < monthDateArray[currentMonth]; i++) {
+    for (let i = 1; i <= monthDateArray[currentMonth]; i++) {
       const date = makeDOM("div", {
         className: "date",
-        innerHTML: i + 1,
-        "data-date": i + 1,
+        innerHTML: i,
+        "data-date": i,
       });
-      if (monthArray.indexOf(month.innerHTML) === todayMonth && i + 1 === todayDate && year.innerHTML === todayYear.toString()) date.classList.add('today');
+      if (monthArray.indexOf(month.innerHTML) === todayMonth && i === todayDate && year.innerHTML === todayYear.toString()) date.classList.add('today');
       if(calendarDate.childNodes.length % 7 === 0) date.classList.add('sun');
       calendarDate.appendChild(date);
     }
     const currentChildNodeLength = calendarDate.childNodes.length;
     console.log(currentChildNodeLength);
 
-    for (let i = 0; i < 42 - currentChildNodeLength; i++) {
+    for (let i = 1; i <= 42 - currentChildNodeLength; i++) {
       const date = makeDOM("div", {
         className: "date next-month",
-        innerHTML: i + 1,
-        "data-date": i + 1,
+        innerHTML: i,
+        "data-date": i,
       });
       calendarDate.appendChild(date);
     }
