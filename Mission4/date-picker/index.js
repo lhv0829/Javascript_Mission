@@ -4,10 +4,11 @@ const makeDOM = (domType, propertyMap) => {
   // Object.keys(propertyMap) -> ["className", "alt"]
   const dom = document.createElement(domType);
   Object.keys(propertyMap).forEach((key) => {
-    if (key.startsWith("data-")) {
-      const dataKey = key.slice(5);
-      dom.dataset[dataKey] = propertyMap[key];
-    } else dom[key] = propertyMap[key];
+    // if (key.startsWith("data-")) {
+    //   const dataKey = key.slice(5);
+    //   dom.dataset[dataKey] = propertyMap[key];
+    // } else 
+    dom[key] = propertyMap[key];
   });
   return dom;
 };
@@ -42,6 +43,32 @@ const DatePicker = ($container) => {
     style: 'display: none;',
   });
   $container.appendChild(calendarDiv);
+  const calendarBackground = makeDOM('div', {
+    className: 'calendar-background',
+    style: `height: ${window.innerHeight}px; display: none;`,
+  });
+  $container.after(calendarBackground);
+  console.log(`window.innerHeight : ${window.innerHeight}`);
+
+  let calendarDivWidth = getComputedStyle(calendarDiv).getPropertyValue('--calendar-size');
+  let temp_size = window.innerWidth;
+  window.addEventListener('resize', () => {
+    if(matchMedia("screen and (max-width: 767px)").matches){
+      console.log("mobile");
+      calendarDivWidth = window.innerWidth * 0.6;
+    }else if(matchMedia("screen and (max-width: 1023px)").matches){
+      console.log("tablet");
+      calendarDivWidth = window.innerWidth * 0.6;
+    }else if(matchMedia("screen and (min-width: 1024px)").matches){
+      console.log("desktop");
+      calendarDivWidth = window.innerWidth * 0.6;
+    }
+    if(calendarDivWidth < 240) calendarDivWidth = 240;
+    if(calendarDivWidth > 800) calendarDivWidth = 800;
+    console.log(`달력 크기 : ${calendarDivWidth} & 브라우저 크기 : ${temp_size}`);
+    calendarDiv.style.setProperty('--calendar-size', calendarDivWidth + 'px');
+    calendarBackground.style.height = `${window.innerHeight}px`;
+  });
 
   const today = new Date();
 
@@ -105,7 +132,7 @@ const DatePicker = ($container) => {
     const day = makeDOM("div", {
       className: "day",
       innerHTML: dayArray[i],
-      "data-day": dayArray[i],
+      // "data-day": dayArray[i],
     });
     calendarDay.appendChild(day);
   }
@@ -134,12 +161,12 @@ const DatePicker = ($container) => {
         className: "date last-month",
         innerHTML:
           monthDateArray[currentMonth - 1] - monthFirstDay + i,
-        "data-date":
-          monthDateArray[currentMonth - 1] - monthFirstDay + i,
+        // "data-date":
+        //   monthDateArray[currentMonth - 1] - monthFirstDay + i,
       });
       if(currentMonth === 0){
         date.innerHTML = monthDateArray[11] - monthFirstDay + i;
-        date.dataset.date = monthDateArray[11] - monthFirstDay + i;
+        // date.dataset.date = monthDateArray[11] - monthFirstDay + i;
       }
       calendarDate.appendChild(date);
     }
@@ -148,7 +175,7 @@ const DatePicker = ($container) => {
       const date = makeDOM("div", {
         className: "date",
         innerHTML: i,
-        "data-date": i,
+        // "data-date": i,
       });
       if (monthArray.indexOf(month.innerHTML) === todayMonth && i === todayDate && year.innerHTML === todayYear.toString()) date.classList.add('today');
       if(calendarDate.childNodes.length % 7 === 0) date.classList.add('sun');
@@ -161,22 +188,16 @@ const DatePicker = ($container) => {
       const date = makeDOM("div", {
         className: "date next-month",
         innerHTML: i,
-        "data-date": i,
+        // "data-date": i,
       });
       calendarDate.appendChild(date);
     }
-    // calendarDate.childNodes.forEach((item) => item.addEventListener('mouseover', e => {
-    //   e.target.classList.add('hover');
-    // }));
     $container.addEventListener('mouseover', e => {
       if(e.target.classList.contains('date')) e.target.classList.add('hover');
     });
     $container.addEventListener('mouseout', e => {
       if(e.target.classList.contains('date')) e.target.classList.remove('hover');
     });
-    // calendarDate.childNodes.forEach((item) => item.addEventListener('mouseout', e => {
-    //   e.target.classList.remove('hover');
-    // }));
   };
   // setCalendarDate(calendarDate, currentMonth);
   const setCalendarAll = (yearMonthInfo,calendarDate , month, year) => {
@@ -187,20 +208,22 @@ const DatePicker = ($container) => {
     calendarDate.childNodes.forEach((item) => item.addEventListener('click', e => {
       if(e.target.classList.contains('last-month')){
         if(month === 0) datePickerInput.value = `${year - 1}-12-${e.target.innerHTML}`;
-        else datePickerInput.value = `${year}-${month}-${e.target.innerHTML}`;
+        else datePickerInput.value = `${year}-${month < 10 ? '0' + month : month}-${e.target.innerHTML}`;
       }
       else if(e.target.classList.contains('next-month')){
-        if(month === 11) datePickerInput.value = `${year + 1}-01-${e.target.innerHTML}`;
-        else datePickerInput.value = `${year}-${month + 2}-${e.target.innerHTML}`;
+        if(month === 11) datePickerInput.value = `${year + 1}-01-${parseInt(e.target.innerHTML) < 10 ? '0' + e.target.innerHTML : e.target.innerHTML}`;
+        else datePickerInput.value = `${year}-${month + 2 < 10 ? '0' + (month + 2) : month + 2}-${parseInt(e.target.innerHTML) < 10 ? '0' + e.target.innerHTML : e.target.innerHTML}`;
       }
-      else datePickerInput.value = `${year}-${month + 1}-${e.target.innerHTML}`;
+      else datePickerInput.value = `${year}-${month + 1 < 10 ? '0' + (month + 1) : month + 1}-${parseInt(e.target.innerHTML) < 10 ? '0' + e.target.innerHTML : e.target.innerHTML}`;
       calendarDiv.style.display = 'none';
+      calendarBackground.style.display = 'none';
     }));
   };
   setCalendarAll(yearMonthInfo, calendarDate, currentMonth, currentYear);
   // event
   datePickerInput.addEventListener('click', () => {
     calendarDiv.style.display = '';
+    calendarBackground.style.display = '';
   });
 
   leftArrow.addEventListener('click', () => {
@@ -221,7 +244,11 @@ const DatePicker = ($container) => {
     setCalendarAll(yearMonthInfo, calendarDate, currentMonth, currentYear);
   });
   document.body.addEventListener('click', e => {
-    if(e.target.className === 'date-picker') calendarDiv.style.display = 'none';
+    if(e.target.className === 'calendar-background'){
+      calendarDiv.style.display = 'none';
+      calendarBackground.style.display = 'none';
+    }
+    console.log(e.target);
   })
 
 };
