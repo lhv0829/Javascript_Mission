@@ -3,11 +3,7 @@ const makeDOM = (domType, propertyMap) => {
   // propertyMap : {"className" : "product-card", "alt" : ...}
   // Object.keys(propertyMap) -> ["className", "alt"]
   const dom = document.createElement(domType);
-  Object.keys(propertyMap).forEach((key) => {
-    // if (key.startsWith("data-")) {
-    //   const dataKey = key.slice(5);
-    //   dom.dataset[dataKey] = propertyMap[key];
-    // } else 
+  Object.keys(propertyMap).forEach((key) => { 
     dom[key] = propertyMap[key];
   });
   return dom;
@@ -48,24 +44,19 @@ const DatePicker = ($container) => {
     style: `height: ${window.innerHeight}px; display: none;`,
   });
   $container.after(calendarBackground);
-  console.log(`window.innerHeight : ${window.innerHeight}`);
 
   let calendarDivWidth = getComputedStyle(calendarDiv).getPropertyValue('--calendar-size');
-  let temp_size = window.innerWidth;
+
   window.addEventListener('resize', () => {
     if(matchMedia("screen and (max-width: 767px)").matches){
-      console.log("mobile");
       calendarDivWidth = window.innerWidth * 0.6;
     }else if(matchMedia("screen and (max-width: 1023px)").matches){
-      console.log("tablet");
       calendarDivWidth = window.innerWidth * 0.6;
     }else if(matchMedia("screen and (min-width: 1024px)").matches){
-      console.log("desktop");
       calendarDivWidth = window.innerWidth * 0.6;
     }
     if(calendarDivWidth < 240) calendarDivWidth = 240;
     if(calendarDivWidth > 800) calendarDivWidth = 800;
-    console.log(`달력 크기 : ${calendarDivWidth} & 브라우저 크기 : ${temp_size}`);
     calendarDiv.style.setProperty('--calendar-size', calendarDivWidth + 'px');
     calendarBackground.style.height = `${window.innerHeight}px`;
   });
@@ -74,15 +65,9 @@ const DatePicker = ($container) => {
 
   let currentYear = today.getFullYear();
   let currentMonth = today.getMonth();
-  // const currentDate = today.getDate();
   const todayDate = today.getDate();
   const todayMonth = today.getMonth();
   const todayYear = today.getFullYear();
-  // const todayDay = today.getDay();
-  // console.log(todayDay);
-  const monthFirstDate = new Date(currentYear, currentMonth, 1);
-  console.log(monthFirstDate);
-  // const monthFirstDay = monthFirstDate.getDay();
 
   // calendar-nav
   const calendarNav = makeDOM("div", {
@@ -113,7 +98,6 @@ const DatePicker = ($container) => {
   calendarNav.appendChild(leftArrow);
   calendarNav.appendChild(yearMonthInfo);
   calendarNav.appendChild(rightArrow);
-  // setYearMonth(yearMonthInfo, currentMonth, currentYear);
 
   // calendar-nav end
 
@@ -132,7 +116,6 @@ const DatePicker = ($container) => {
     const day = makeDOM("div", {
       className: "day",
       innerHTML: dayArray[i],
-      // "data-day": dayArray[i],
     });
     calendarDay.appendChild(day);
   }
@@ -145,14 +128,11 @@ const DatePicker = ($container) => {
   let monthDateArray = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
   const setCalendarDate = (calendarDate, currentMonth) => {
-    const month = document.getElementsByClassName("month")[0];
-    console.log(month);
-    const year = document.getElementsByClassName('year')[0];
+    const month = $container.getElementsByClassName("month")[0];
+    const year = $container.getElementsByClassName('year')[0];
     const monthFirstDate = new Date(currentYear, currentMonth, 1);
-    // console.log(monthFirstDate);
     const monthFirstDay = monthFirstDate.getDay();
-    // const monthFirstDayMonth = monthFirstDate.getMonth();
-    // console.log(month);
+
     if(parseInt(year.innerHTML) % 4 === 0 && !(parseInt(year.innerHTML) % 100 === 0)) monthDateArray[1] = 29;
     else if(parseInt(year.innerHTML) % 400 === 0) monthDateArray[1] = 29;
     else monthDateArray[1] = 28;
@@ -161,12 +141,9 @@ const DatePicker = ($container) => {
         className: "date last-month",
         innerHTML:
           monthDateArray[currentMonth - 1] - monthFirstDay + i,
-        // "data-date":
-        //   monthDateArray[currentMonth - 1] - monthFirstDay + i,
       });
       if(currentMonth === 0){
         date.innerHTML = monthDateArray[11] - monthFirstDay + i;
-        // date.dataset.date = monthDateArray[11] - monthFirstDay + i;
       }
       calendarDate.appendChild(date);
     }
@@ -175,20 +152,19 @@ const DatePicker = ($container) => {
       const date = makeDOM("div", {
         className: "date",
         innerHTML: i,
-        // "data-date": i,
       });
-      if (monthArray.indexOf(month.innerHTML) === todayMonth && i === todayDate && year.innerHTML === todayYear.toString()) date.classList.add('today');
+      if (monthArray.indexOf(month.innerHTML) === todayMonth && i === todayDate && year.innerHTML === todayYear.toString()){
+        date.classList.add('today');
+      } 
       if(calendarDate.childNodes.length % 7 === 0) date.classList.add('sun');
       calendarDate.appendChild(date);
     }
     const currentChildNodeLength = calendarDate.childNodes.length;
-    console.log(currentChildNodeLength);
 
     for (let i = 1; i <= 42 - currentChildNodeLength; i++) {
       const date = makeDOM("div", {
         className: "date next-month",
         innerHTML: i,
-        // "data-date": i,
       });
       calendarDate.appendChild(date);
     }
@@ -199,7 +175,7 @@ const DatePicker = ($container) => {
       if(e.target.classList.contains('date')) e.target.classList.remove('hover');
     });
   };
-  // setCalendarDate(calendarDate, currentMonth);
+
   const setCalendarAll = (yearMonthInfo,calendarDate , month, year) => {
     yearMonthInfo.replaceChildren();
     calendarDate.replaceChildren();
@@ -248,7 +224,6 @@ const DatePicker = ($container) => {
       calendarDiv.style.display = 'none';
       calendarBackground.style.display = 'none';
     }
-    console.log(e.target);
   })
 
 };
@@ -257,7 +232,6 @@ const linkDOM = makeDOM("link", {
   rel: "stylesheet",
 });
 const beforeLink = document.getElementsByTagName("link")[1];
-console.log(linkDOM);
 beforeLink.after(linkDOM);
 
 export default DatePicker;
