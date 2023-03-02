@@ -1,6 +1,6 @@
 import { makeDOM } from "./makeDOM.js";
 
-const Calendar = ($container) => {
+const Calendar = ($container, datePickerInput) => {
   const monthArray = [
     "January",
     "February",
