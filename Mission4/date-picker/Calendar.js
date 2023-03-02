@@ -1,6 +1,6 @@
 import { makeDOM } from "./makeDOM.js";
 
-const DatePicker = ($container) => {
+const Calendar = ($container) => {
   const monthArray = [
     "January",
     "February",
@@ -16,28 +16,13 @@ const DatePicker = ($container) => {
     "December",
   ];
   const dayArray = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-
-  const datePickerInput = makeDOM("input", {
-    className: "date-picker-input",
-    type: "text",
-    value: "Select date",
-    readOnly: "true",
-  });
-
-  $container.appendChild(datePickerInput);
-
-  const calendarDiv = makeDOM("div", {
-    className: "calendar",
-    style: 'display: none;',
-  });
-  $container.appendChild(calendarDiv);
   const calendarBackground = makeDOM('div', {
     className: 'calendar-background',
     style: `height: ${window.innerHeight}px; display: none;`,
   });
   $container.after(calendarBackground);
 
-  let calendarDivWidth = getComputedStyle(calendarDiv).getPropertyValue('--calendar-size');
+  let calendarDivWidth = getComputedStyle($container).getPropertyValue('--calendar-size');
 
   window.addEventListener('resize', () => {
     if(matchMedia("screen and (max-width: 767px)").matches){
@@ -51,7 +36,7 @@ const DatePicker = ($container) => {
     }
     if(calendarDivWidth < 240) calendarDivWidth = 240;
     if(calendarDivWidth > 800) calendarDivWidth = 800;
-    calendarDiv.style.setProperty('--calendar-size', calendarDivWidth + 'px');
+    $container.style.setProperty('--calendar-size', calendarDivWidth + 'px');
     calendarBackground.style.height = `${window.innerHeight}px`;
   });
 
@@ -67,7 +52,7 @@ const DatePicker = ($container) => {
   const calendarNav = makeDOM("div", {
     className: "calendar-nav",
   });
-  calendarDiv.appendChild(calendarNav);
+  $container.appendChild(calendarNav);
   const setYearMonth = (yearMonthInfo, currentMonth, currentYear) => {
     const month = makeDOM("div", {
       className: "month",
@@ -99,7 +84,7 @@ const DatePicker = ($container) => {
   const calendarGrid = makeDOM("div", {
     className: "calendar-grid",
   });
-  calendarDiv.appendChild(calendarGrid);
+  $container.appendChild(calendarGrid);
 
   const calendarDay = makeDOM("div", {
     className: "calendar-day",
@@ -189,7 +174,7 @@ const DatePicker = ($container) => {
       else datePickerInput.value = `${year}-${month + 1 < 10 ? '0' + (month + 1) : month + 1}-${parseInt(e.target.innerHTML) < 10 ? '0' + e.target.innerHTML : e.target.innerHTML}`;
       e.target.classList.add('pick');
       console.log(datePickerInput.value);
-      calendarDiv.style.display = 'none';
+      $container.style.display = 'none';
       calendarBackground.style.display = 'none';
       if(beforePick === undefined){
         beforePick = e.target;
@@ -211,7 +196,7 @@ const DatePicker = ($container) => {
   setCalendarAll(yearMonthInfo, calendarDate, currentMonth, currentYear);
   // event
   datePickerInput.addEventListener('click', () => {
-    calendarDiv.style.display = '';
+    $container.style.display = '';
     calendarBackground.style.display = '';
   });
 
@@ -232,19 +217,6 @@ const DatePicker = ($container) => {
     } 
     setCalendarAll(yearMonthInfo, calendarDate, currentMonth, currentYear);
   });
-  document.body.addEventListener('click', e => {
-    if(e.target.className === 'calendar-background'){
-      calendarDiv.style.display = 'none';
-      calendarBackground.style.display = 'none';
-    }
-  })
-
 };
-const linkDOM = makeDOM("link", {
-  href: "date-picker/theme.css",
-  rel: "stylesheet",
-});
-const beforeLink = document.getElementsByTagName("link")[1];
-beforeLink.after(linkDOM);
 
-export default DatePicker;
+export default Calendar;
