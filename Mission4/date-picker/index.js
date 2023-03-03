@@ -60,36 +60,33 @@ const DatePicker = ($container) => {
         if (month === 0)
           datePickerInput.value = `${year - 1}-12-${e.target.innerHTML}`;
         else
-          datePickerInput.value = `${year}-${
-            month < 10 ? "0" + month : month
-          }-${e.target.innerHTML}`;
+          datePickerInput.value = `${year}-${month < 10 ? "0" + month : month
+            }-${e.target.innerHTML}`;
       } else if (e.target.classList.contains("next-month")) {
         if (month === 11)
-          datePickerInput.value = `${year + 1}-01-${
-            parseInt(e.target.innerHTML) < 10
+          datePickerInput.value = `${year + 1}-01-${parseInt(e.target.innerHTML) < 10
               ? "0" + e.target.innerHTML
               : e.target.innerHTML
-          }`;
+            }`;
         else
-          datePickerInput.value = `${year}-${
-            month + 2 < 10 ? "0" + (month + 2) : month + 2
-          }-${
-            parseInt(e.target.innerHTML) < 10
+          datePickerInput.value = `${year}-${month + 2 < 10 ? "0" + (month + 2) : month + 2
+            }-${parseInt(e.target.innerHTML) < 10
               ? "0" + e.target.innerHTML
               : e.target.innerHTML
-          }`;
+            }`;
       } else
-        datePickerInput.value = `${year}-${
-          month + 1 < 10 ? "0" + (month + 1) : month + 1
-        }-${
-          parseInt(e.target.innerHTML) < 10
+        datePickerInput.value = `${year}-${month + 1 < 10 ? "0" + (month + 1) : month + 1
+          }-${parseInt(e.target.innerHTML) < 10
             ? "0" + e.target.innerHTML
             : e.target.innerHTML
-        }`;
+          }`;
       console.log(datePickerInput.value);
+
       e.target.classList.add("pick");
+
       calendarDiv.style.display = "none";
       modalBackground.style.display = "none";
+
       if (beforePick === undefined) {
         beforePick = e.target;
       } else {
