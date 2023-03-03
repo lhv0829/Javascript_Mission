@@ -17,21 +17,6 @@ const Calendar = ($container) => {
   ];
   const dayArray = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
-  let calendarSize = getComputedStyle($container).getPropertyValue('--calendar-size');
-
-  window.addEventListener('resize', () => {
-    if(matchMedia("screen and (max-width: 767px)").matches){
-      calendarSize = window.innerWidth * 0.6;
-    }else if(matchMedia("screen and (max-width: 1023px)").matches){
-      calendarSize = window.innerWidth * 0.6;
-    }else if(matchMedia("screen and (min-width: 1024px)").matches){
-      calendarSize = window.innerWidth * 0.6;
-    }
-    if(calendarSize < 240) calendarSize = 240;
-    if(calendarSize > 800) calendarSize = 800;
-    $container.style.setProperty('--calendar-size', calendarSize + 'px');
-  });
-
   const TODAY = new Date(); // 오늘
   let currentYear = TODAY.getFullYear(); // 현재 달력에서 보여주는 해
   let currentMonth = TODAY.getMonth(); // 현재 달력에서 보여주는 달
@@ -101,8 +86,8 @@ const Calendar = ($container) => {
     const thisMonth_firstDate = new Date(currentYear, currentMonth, 1);
     const thisMonth_firstDay = thisMonth_firstDate.getDay();
 
-    if(parseInt(year.innerHTML) % 4 === 0 && !(parseInt(year.innerHTML) % 100 === 0)) monthDateArray[1] = 29;
-    else if(parseInt(year.innerHTML) % 400 === 0) monthDateArray[1] = 29;
+    if (parseInt(year.innerHTML) % 4 === 0 && !(parseInt(year.innerHTML) % 100 === 0)) monthDateArray[1] = 29;
+    else if (parseInt(year.innerHTML) % 400 === 0) monthDateArray[1] = 29;
     else monthDateArray[1] = 28;
     for (let i = 1; i <= thisMonth_firstDay; i++) { // 이번 달 표시하고 앞에 남는 칸 만큼 저번 달 날짜 채우기
       const date = makeDOM("div", {
@@ -110,7 +95,7 @@ const Calendar = ($container) => {
         innerHTML:
           monthDateArray[currentMonth - 1] - thisMonth_firstDay + i,
       });
-      if(currentMonth === 0){
+      if (currentMonth === 0) {
         date.innerHTML = monthDateArray[11] - thisMonth_firstDay + i;
       }
       calendarDate.appendChild(date);
@@ -121,10 +106,10 @@ const Calendar = ($container) => {
         className: "date",
         innerHTML: i,
       });
-      if (monthArray.indexOf(month.innerHTML) === thisMonth && i === today && year.innerHTML === thisYear.toString()){
+      if (monthArray.indexOf(month.innerHTML) === thisMonth && i === today && year.innerHTML === thisYear.toString()) {
         date.classList.add('today');
-      } 
-      if(calendarDate.childNodes.length % 7 === 0) date.classList.add('sun');
+      }
+      if (calendarDate.childNodes.length % 7 === 0) date.classList.add('sun');
       calendarDate.appendChild(date);
     }
 
@@ -138,14 +123,14 @@ const Calendar = ($container) => {
       calendarDate.appendChild(date);
     }
     $container.addEventListener('mouseover', e => {
-      if(e.target.classList.contains('date')) e.target.classList.add('hover');
+      if (e.target.classList.contains('date')) e.target.classList.add('hover');
     });
     $container.addEventListener('mouseout', e => {
-      if(e.target.classList.contains('date')) e.target.classList.remove('hover');
+      if (e.target.classList.contains('date')) e.target.classList.remove('hover');
     });
   };
 
-  const setCalendar = (yearMonthInfo,calendarDate , month, year) => {
+  const setCalendar = (yearMonthInfo, calendarDate, month, year) => {
     yearMonthInfo.replaceChildren();
     calendarDate.replaceChildren();
     setYearMonth(yearMonthInfo, month, year);
@@ -155,41 +140,38 @@ const Calendar = ($container) => {
   setCalendar(yearMonthInfo, calendarDate, currentMonth, currentYear);
 
   $container.addEventListener('click', e => {
-    if(e.target === leftArrow){
+    if (e.target === leftArrow) {
       currentMonth--;
-      if(currentMonth < 0){
+      if (currentMonth < 0) {
         currentYear -= 1;
         currentMonth = 11;
       }
       setCalendar(yearMonthInfo, calendarDate, currentMonth, currentYear);
     }
-    if(e.target === rightArrow){
+    if (e.target === rightArrow) {
       currentMonth++;
-      if(currentMonth > 11){
+      if (currentMonth > 11) {
         currentYear += 1;
         currentMonth = 0;
-      } 
+      }
       setCalendar(yearMonthInfo, calendarDate, currentMonth, currentYear);
     }
   });
 
-  // leftArrow.addEventListener('click', () => {
-  //   currentMonth--;
-  //   if(currentMonth < 0){
-  //     currentYear -= 1;
-  //     currentMonth = 11;
-  //   }
-  //   setCalendar(yearMonthInfo, calendarDate, currentMonth, currentYear);
-  // });
+  let calendarSize = getComputedStyle($container).getPropertyValue('--calendar-size');
 
-  // rightArrow.addEventListener('click', () => {
-  //   currentMonth++;
-  //   if(currentMonth > 11){
-  //     currentYear += 1;
-  //     currentMonth = 0;
-  //   } 
-  //   setCalendar(yearMonthInfo, calendarDate, currentMonth, currentYear);
-  // });
+  window.addEventListener('resize', () => {
+    if (matchMedia("screen and (max-width: 767px)").matches) {
+      calendarSize = window.innerWidth * 0.6;
+    } else if (matchMedia("screen and (max-width: 1023px)").matches) {
+      calendarSize = window.innerWidth * 0.6;
+    } else if (matchMedia("screen and (min-width: 1024px)").matches) {
+      calendarSize = window.innerWidth * 0.6;
+    }
+    if (calendarSize < 240) calendarSize = 240;
+    if (calendarSize > 800) calendarSize = 800;
+    $container.style.setProperty('--calendar-size', calendarSize + 'px');
+  });
 };
 const stylesheetLinkDOM = makeDOM("link", {
   href: "calendar/calendarTheme.css",
