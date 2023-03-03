@@ -1,4 +1,4 @@
-/* @import url(https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css);
+@import url(https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css);
 
 .calendar{
   --calendar-size : 300px;
@@ -62,24 +62,13 @@
   color: red;
 }
 .today{
-  border: 1px solid #54c242;
+  border: 1px solid #022913;
   border-radius: 50%;
 }
 .last-month, .next-month{
-  color: gray;
-} */
-.date-picker-input{
-  box-sizing: border-box;
-  margin-bottom: 10px;
-  padding-left: 8px;
-  width: 150px;
-  height: 30px;
-  font-size: 1rem;
-  border-radius: 3px;
-  border: 1px solid gray;
-  background-color: white;
+  color: rgb(133, 128, 128);
 }
-/* .hover{
+.hover{
   background-color: #54c242;
   color: white;
   border-radius: 50%;
@@ -88,12 +77,5 @@
   background-color: #54c242;
   color: white;
   border-radius: 50%;
-} */
-.modal-background{
-  width: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 1;
-  background-color: transparent;
 }
+
