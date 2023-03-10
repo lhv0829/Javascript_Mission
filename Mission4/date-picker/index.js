@@ -11,12 +11,12 @@ const DatePicker = ($container) => {
 
   $container.appendChild(datePickerInput);
 
-  const calendarDiv = makeDOM("div", {
+  const calendar = makeDOM("div", {
     className: "calendar",
     style: "display: none;",
   });
-  $container.appendChild(calendarDiv);
-  Calendar(calendarDiv);
+  $container.appendChild(calendar);
+  Calendar(calendar);
 
   const modalBackground = makeDOM("div", {
     className: "modal-background",
@@ -47,7 +47,7 @@ const DatePicker = ($container) => {
   $container.addEventListener("click", (e) => {
     // console.log(e.target);
     if (e.target.className === "date-picker-input") {
-      calendarDiv.style.display = "";
+      calendar.style.display = "";
       modalBackground.style.display = "";
     }
     if (e.target.classList.contains("date")) {
@@ -84,7 +84,7 @@ const DatePicker = ($container) => {
 
       e.target.classList.add("pick");
 
-      calendarDiv.style.display = "none";
+      calendar.style.display = "none";
       modalBackground.style.display = "none";
 
       if (beforePick === undefined) {
@@ -98,7 +98,7 @@ const DatePicker = ($container) => {
 
   document.body.addEventListener("click", (e) => {
     if (e.target.className === "modal-background") {
-      calendarDiv.style.display = "none";
+      calendar.style.display = "none";
       modalBackground.style.display = "none";
     }
   });

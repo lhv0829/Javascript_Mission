@@ -44,6 +44,7 @@ export const StarRating = $container => {
   });
   $container.addEventListener('mouseout', e => {
     const idx = [...starRatingContainer.children].indexOf(e.target);
+
     for(let i = 0; i <= idx; i++){
       [...starRatingContainer.children][i].classList.remove('hovered');
   }
@@ -53,10 +54,8 @@ export const StarRating = $container => {
     rel: "stylesheet",
   });
   const beforeLink = document.getElementsByTagName('link')[1];
-  console.log(linkDOM);
   beforeLink.after(linkDOM);
-
 };
-// const setStarRating = () => {};
+
 
 export default StarRating;

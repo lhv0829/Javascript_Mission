@@ -1,5 +1,5 @@
 // do something!
-const toggle = document.getElementsByClassName("toggle")[0];
+const toggle = document.querySelector(".toggle");
 const sidebar = document.getElementsByTagName("nav")[0];
 
 let open = localStorage.getItem("open");

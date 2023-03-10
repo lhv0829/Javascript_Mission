@@ -23,9 +23,9 @@ const AnalogClock = $container => {
   $container.appendChild(hand_min);
   $container.appendChild(hand_sec);
   
-  for(let i = 0; i < 12; i++){
+  for(let i = 1; i <= 12; i++){
     const time = makeDOM('div', {
-      className : `time time${i + 1}`,
+      className : `time time${i}`,
       innerHTML : `|`,
     });
     $container.appendChild(time);

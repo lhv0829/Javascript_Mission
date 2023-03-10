@@ -41,18 +41,18 @@ const Calendar = ($container) => {
     yearMonthInfo.appendChild(month);
     yearMonthInfo.appendChild(year);
   };
-  const leftArrow = makeDOM("i", {
+  const leftArrowButton = makeDOM("i", {
     className: "bx bxs-left-arrow",
   });
   const yearMonthInfo = makeDOM("div", {
     className: "year-month",
   });
-  const rightArrow = makeDOM("i", {
+  const rightArrowButton = makeDOM("i", {
     className: "bx bxs-right-arrow",
   });
-  calendarNav.appendChild(leftArrow);
+  calendarNav.appendChild(leftArrowButton);
   calendarNav.appendChild(yearMonthInfo);
-  calendarNav.appendChild(rightArrow);
+  calendarNav.appendChild(rightArrowButton);
 
   // calendar-grid
   const calendarGrid = makeDOM("div", {
@@ -78,7 +78,7 @@ const Calendar = ($container) => {
   });
   calendarGrid.appendChild(calendarDate);
 
-  let monthDateArray = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  const monthDateArray = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
   const setCalendarDate = (calendarDate, currentMonth) => {
     const month = $container.getElementsByClassName("month")[0];
@@ -140,7 +140,7 @@ const Calendar = ($container) => {
   setCalendar(yearMonthInfo, calendarDate, currentMonth, currentYear);
 
   $container.addEventListener('click', e => {
-    if (e.target === leftArrow) {
+    if (e.target === leftArrowButton) {
       currentMonth--;
       if (currentMonth < 0) {
         currentYear -= 1;
@@ -148,7 +148,7 @@ const Calendar = ($container) => {
       }
       setCalendar(yearMonthInfo, calendarDate, currentMonth, currentYear);
     }
-    if (e.target === rightArrow) {
+    if (e.target === rightArrowButton) {
       currentMonth++;
       if (currentMonth > 11) {
         currentYear += 1;
