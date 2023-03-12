@@ -85,6 +85,7 @@ const Calendar = ($container) => {
     const year = $container.getElementsByClassName('year')[0];
     const thisMonth_firstDate = new Date(currentYear, currentMonth, 1);
     const thisMonth_firstDay = thisMonth_firstDate.getDay();
+    console.log(thisMonth_firstDay);
 
     if (parseInt(year.innerHTML) % 4 === 0 && !(parseInt(year.innerHTML) % 100 === 0)) monthDateArray[1] = 29;
     else if (parseInt(year.innerHTML) % 400 === 0) monthDateArray[1] = 29;

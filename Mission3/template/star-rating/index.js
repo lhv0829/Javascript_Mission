@@ -1,5 +1,5 @@
 // do something!
-export const makeDOM = (domType, propertyMap) => {
+const makeDOM = (domType, propertyMap) => {
   // domType : div, a, li...
   // propertyMap : {"className" : "product-card", "alt" : ...}
   // Object.keys(propertyMap) -> ["className", "alt"]
@@ -10,8 +10,7 @@ export const makeDOM = (domType, propertyMap) => {
   return dom;
 };
 
-// <i class='bx bxs-star'></i>
-export const StarRating = $container => {
+const StarRating = $container => {
   const maxRating = parseInt($container.dataset.maxRating);
   const starRatingContainer = makeDOM('div', {
     className: 'star-rating-container',
@@ -44,7 +43,6 @@ export const StarRating = $container => {
   });
   $container.addEventListener('mouseout', e => {
     const idx = [...starRatingContainer.children].indexOf(e.target);
-
     for(let i = 0; i <= idx; i++){
       [...starRatingContainer.children][i].classList.remove('hovered');
   }

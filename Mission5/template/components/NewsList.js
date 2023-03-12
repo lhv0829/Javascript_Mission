@@ -50,7 +50,7 @@ const NewsList = $container => {
     });
     
     const description = makeDOM('p', {
-      innerHTML: article.description === null ? lorem : article.description,
+      innerText: article.description === null ? lorem : article.description,
     });
     section.appendChild(thumbnail);
     section.appendChild(contents);
@@ -63,26 +63,26 @@ const NewsList = $container => {
     articleDOM.appendChild(section);
   };
 
-  // const pageSize = 5;
   let page = 1;
+  let category = 'all';
 
   const renderNewsList = async(category) => {
     const url = `https://newsapi.org/v2/top-headlines?country=kr&category=${category === 'all' ? '' : category}&page=${page}&pageSize=${PAGE_SIZE}&apiKey=${API_KEY}`
     try{
       const response = await axios.get(url);
       response.data.articles.forEach(creatNewsItem);
+      page++;
     }
     catch(e){
       console.log(e);
     }
   }
-  const initializationNewsList = (category) => {
+  const changeCategory = (selectedCategory) => {
+    category = selectedCategory;
     page = 1;
-    renderNewsList(category);
+    articleDOM.innerHTML = '';
+    console.log(category);
   };
-
-  initializationNewsList(state.category);
-
 
   const scrollObserver = makeDOM('div', {
     className: 'scroll-observer',
@@ -93,20 +93,16 @@ const NewsList = $container => {
   });
   scrollObserver.appendChild(observerImg);
   newsListContainer.appendChild(scrollObserver);
-  // const root = document.getElementById('root');
+
   const option = {
     root: null,
     rootMargin: "0px 0px 0px 0px",
-    thredhold: 1,
+    thredhold: 0,
   }
   const addNewsList = (entries, observer) => { 
-    // entries는 IntersectionObserverEntry 객체의 리스트로 배열 형식을 반환합니다.
     entries.forEach(entry => {
       if(entry.isIntersecting){
-        console.log(entry);
-        console.log(entry.target);
-        page++;
-        renderNewsList(state.category);
+        renderNewsList(category);
         console.log(page);
       }
     });
@@ -114,10 +110,7 @@ const NewsList = $container => {
   const observer = new IntersectionObserver(addNewsList, option);
   observer.observe(scrollObserver);
   return {
-    initializationNewsList: initializationNewsList
+    changeCategory: changeCategory
   }
 };
-// globalState.category;
-
-// export const renderNewsList = renderNewsList;
 export default NewsList;

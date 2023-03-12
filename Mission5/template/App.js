@@ -8,7 +8,6 @@ const $container = document.querySelector('#root');
 
 Nav($container);
 
-const newsList = NewsList($container);
 
 const stateProxy = new Proxy(state, {
   get: function (target, prop) {
@@ -32,17 +31,11 @@ function unobserve(callback) {
   observers.delete(callback);
 }
 
-/* function notify() {
-  observers.forEach((callback) => callback());
-} */
+let newsList = NewsList($container);
 function notifyObservers(value) {
-  newsList.initializationNewsList(value);
+  newsList.changeCategory(value);
 }
-/* function selectCategory(category) {
-  stateProxy.selectedCategory = category;
-  //newsList.renderNewsList(category);
-} */
-const article = document.querySelector('.news-list');
+
 const activeCategory = document.querySelector('.active');
 let beforeActiveCategory = activeCategory;
 
@@ -52,7 +45,7 @@ document.body.addEventListener('click', e => {
       beforeActiveCategory.classList.remove('active');
     }
     e.target.classList.add('active');
-    article.replaceChildren();
+    // newsListContainer.replaceChildren();
     stateProxy.category = e.target.id;
     beforeActiveCategory = e.target;
   }
