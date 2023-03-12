@@ -38,14 +38,14 @@ function notifyObservers(value) {
 
 const activeCategory = document.querySelector('.active');
 let beforeActiveCategory = activeCategory;
-
+const articleDOM = document.querySelector('.news-list');
 document.body.addEventListener('click', e => {
   if(e.target.className === 'category-item'){
     if(beforeActiveCategory !== undefined){
       beforeActiveCategory.classList.remove('active');
     }
     e.target.classList.add('active');
-    // newsListContainer.replaceChildren();
+    articleDOM.replaceChildren();
     stateProxy.category = e.target.id;
     beforeActiveCategory = e.target;
   }

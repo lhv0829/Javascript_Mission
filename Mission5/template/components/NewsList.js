@@ -80,7 +80,7 @@ const NewsList = $container => {
   const changeCategory = (selectedCategory) => {
     category = selectedCategory;
     page = 1;
-    articleDOM.innerHTML = '';
+    // articleDOM.innerHTML = '';
     console.log(category);
   };
 
