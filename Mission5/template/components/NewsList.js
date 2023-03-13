@@ -1,5 +1,4 @@
 import { API_KEY, PAGE_SIZE } from "../constant/NewsList.js";
-import state from "../state/state.js";
 import { makeDOM } from "../util/makeDOM.js";
 
 // do something!
@@ -15,13 +14,12 @@ const NewsList = $container => {
   });
   newsListContainer.appendChild(articleDOM);
 
-  const lorem = `Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis, accusamus provident numquam ipsum alias deleniti ut quibusdam doloremque fugiat voluptas pariatur odit beatae velit illum, porro dolorem! A, aspernatur dignissimos.`;
-
+  
   const creatNewsItem = (article) => {
     const section = makeDOM('section', {
       className: 'news-item',
     });
-  
+    
     const thumbnail = makeDOM('div', {
       className: 'thumbnail',
     });
@@ -50,8 +48,11 @@ const NewsList = $container => {
     });
     
     const description = makeDOM('p', {
-      innerText: article.description === null ? lorem : article.description,
+      innerHTML: article.description === null ? '' : article.description,
     });
+    description.style.minHeight = '40px';
+    console.log(description.style.height);
+
     section.appendChild(thumbnail);
     section.appendChild(contents);
     thumbnail.appendChild(thumbnail_a_tag);
@@ -80,8 +81,7 @@ const NewsList = $container => {
   const changeCategory = (selectedCategory) => {
     category = selectedCategory;
     page = 1;
-    // articleDOM.innerHTML = '';
-    console.log(category);
+    articleDOM.innerHTML = '';
   };
 
   const scrollObserver = makeDOM('div', {
@@ -97,17 +97,18 @@ const NewsList = $container => {
   const option = {
     root: null,
     rootMargin: "0px 0px 0px 0px",
-    thredhold: 0,
+    threshold: 1,
   }
-  const addNewsList = (entries, observer) => { 
+
+  const observer = new IntersectionObserver((entries, observer) => { 
     entries.forEach(entry => {
+      console.log(entry.isIntersecting);
       if(entry.isIntersecting){
         renderNewsList(category);
         console.log(page);
       }
     });
-  };
-  const observer = new IntersectionObserver(addNewsList, option);
+  }, option);
   observer.observe(scrollObserver);
   return {
     changeCategory: changeCategory
