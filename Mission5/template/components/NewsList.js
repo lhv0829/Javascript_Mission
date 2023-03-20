@@ -50,7 +50,7 @@ const NewsList = $container => {
     const description = makeDOM('p', {
       innerHTML: article.description === null ? '' : article.description,
     });
-    description.style.minHeight = '40px';
+    description.style.minHeight = '60px';
     console.log(description.style.height);
 
     section.appendChild(thumbnail);

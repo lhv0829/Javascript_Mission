@@ -1,7 +1,5 @@
 import { Nav, NewsList } from "./components/index.js";
-// import { renderNewsList } from "./components/NewsList.js";
 import state from "./state/state.js";
-// import state from "./state/state.js";
 
 // do something!
 const $container = document.querySelector('#root');
@@ -17,12 +15,12 @@ const stateProxy = new Proxy(state, {
   set: function (target, prop, value) {
     const success = Reflect.set(target, prop, value);
     if (success) {
-      notifyObservers(value); // 상태가 변경될 때마다 notify 함수를 호출하여 옵저버 패턴 구현
+      notifyObservers(value);
     }
     return success;
   },
 });
-const observers = new Set(); // 콜백 함수를 등록할 Set 객체
+const observers = new Set();
 
 function observe(callback) {
   observers.add(callback);
