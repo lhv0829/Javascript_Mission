@@ -47,13 +47,13 @@ const StarRating = $container => {
       [...starRatingContainer.children][i].classList.remove('hovered');
   }
   });
-  const linkDOM = makeDOM('link', {
-    href: "star-rating/theme.css",
-    rel: "stylesheet",
-  });
-  const beforeLink = document.getElementsByTagName('link')[1];
-  beforeLink.after(linkDOM);
 };
+const linkDOM = makeDOM('link', {
+  href: "star-rating/theme.css",
+  rel: "stylesheet",
+});
+const beforeLink = document.getElementsByTagName('link')[1];
+beforeLink.after(linkDOM);
 
 
 export default StarRating;
